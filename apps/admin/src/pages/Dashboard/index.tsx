@@ -1,7 +1,5 @@
 import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
-import { ArrowUpOutlined } from '@ant-design/icons';
-
 const Dashboard: React.FC = () => {
   return (
     <div>
