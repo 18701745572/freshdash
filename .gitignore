@@ -1,0 +1,34 @@
+# 依赖目录
+node_modules/
+.pnpm-store/
+
+# 编译产物
+dist/
+.temp/
+.rn_temp/
+.swc/
+
+# IDE / 编辑器
+.idea/
+.vscode/
+.pai/
+.workbuddy/
+*.log
+
+# OS 系统文件
+.DS_Store
+Thumbs.db
+
+# 环境变量（敏感信息，切勿提交）
+.env
+.env.local
+.env.*.local
+
+# 微信小程序开发者工具
+project.private.config.json
+
+# 测试覆盖率
+coverage/
+
+# 本地调试文件
+*.local
