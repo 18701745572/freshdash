@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { Button, Layout, Menu, theme } from 'antd'
 import {
   DashboardOutlined,
@@ -8,11 +9,25 @@ import {
   UserOutlined,
   PayCircleOutlined
 } from '@ant-design/icons'
+import Dashboard from './pages/Dashboard'
+import ProductManage from './pages/ProductManage'
+import OrderManage from './pages/OrderManage'
 
 const { Header, Sider, Content } = Layout
 
-function App() {
+const menuItems = [
+  { key: '/', icon: <DashboardOutlined />, label: '经营看板' },
+  { key: '/products', icon: <ShoppingOutlined />, label: '商品管理' },
+  { key: '/orders', icon: <TruckOutlined />, label: '订单管理' },
+  { key: '/suppliers', icon: <TeamOutlined />, label: '供应商管理' },
+  { key: '/promoters', icon: <UserOutlined />, label: '推广员管理' },
+  { key: '/withdrawals', icon: <PayCircleOutlined />, label: '提现审核' },
+]
+
+function AppLayout() {
   const [collapsed, setCollapsed] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
@@ -24,15 +39,9 @@ function App() {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
-          items={[
-            { key: '1', icon: <DashboardOutlined />, label: '经营看板' },
-            { key: '2', icon: <ShoppingOutlined />, label: '商品管理' },
-            { key: '3', icon: <TruckOutlined />, label: '订单管理' },
-            { key: '4', icon: <TeamOutlined />, label: '供应商管理' },
-            { key: '5', icon: <UserOutlined />, label: '推广员管理' },
-            { key: '6', icon: <PayCircleOutlined />, label: '提现审核' },
-          ]}
+          selectedKeys={[location.pathname]}
+          items={menuItems}
+          onClick={({ key }) => navigate(key)}
         />
       </Sider>
       <Layout>
@@ -55,11 +64,25 @@ function App() {
             borderRadius: borderRadiusLG,
           }}
         >
-          <h2>欢迎使用鲜达生鲜管理后台</h2>
-          <p>请先完善各模块功能。</p>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/products" element={<ProductManage />} />
+            <Route path="/orders" element={<OrderManage />} />
+            <Route path="/suppliers" element={<div>供应商管理（待开发）</div>} />
+            <Route path="/promoters" element={<div>推广员管理（待开发）</div>} />
+            <Route path="/withdrawals" element={<div>提现审核（待开发）</div>} />
+          </Routes>
         </Content>
       </Layout>
     </Layout>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
+    </BrowserRouter>
   )
 }
 
