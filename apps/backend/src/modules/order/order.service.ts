@@ -1,41 +1,48 @@
 import { Injectable } from '@nestjs/common';
-
-const mockOrders = [
-  {
-    id: '1', orderNo: 'XD20240604001', userId: '1', status: 'PENDING_PAYMENT',
-    totalAmount: 4880, items: [
-      { id: 'i1', productId: '1', productName: '烟台红富士苹果', productImage: 'https://picsum.photos/id/292/300/300', price: 1990, quantity: 1 },
-      { id: 'i2', productId: '3', productName: '鲜活基围虾', productImage: 'https://picsum.photos/id/431/300/300', price: 3990, quantity: 1 },
-    ],
-    createdAt: '2024-06-04T10:30:00.000Z',
-  },
-];
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class OrderService {
+  constructor(private prisma: PrismaService) {}
+
   findAll(userId: string, status?: string) {
-    let orders = mockOrders.filter((o) => o.userId === userId);
+    const where: any = { userId };
     if (status) {
-      orders = orders.filter((o) => o.status === status);
+      where.status = status;
     }
-    return orders;
+    return this.prisma.order.findMany({
+      where,
+      include: { items: true },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   findOne(id: string) {
-    return mockOrders.find((o) => o.id === id) || null;
+    return this.prisma.order.findUnique({
+      where: { id },
+      include: { items: true },
+    });
   }
 
-  create(body: { userId: string; items: { productId: string; quantity: number }[] }) {
-    const newOrder = {
-      id: String(mockOrders.length + 1),
-      orderNo: `XD${Date.now()}`,
-      userId: body.userId,
-      status: 'PENDING_PAYMENT',
-      totalAmount: 0,
-      items: body.items.map((item, idx) => ({ id: `i${idx}`, productId: item.productId, productName: '商品', productImage: '', price: 0, quantity: item.quantity })),
-      createdAt: new Date().toISOString(),
-    };
-    mockOrders.push(newOrder as any);
-    return newOrder;
+  async create(data: { userId: string; items: { productId: string; quantity: number }[] }) {
+    // TODO: 计算总价并创建订单
+    return this.prisma.order.create({
+      data: {
+        orderNo: `XD${Date.now()}`,
+        userId: data.userId,
+        status: 'PENDING_PAYMENT',
+        totalAmount: 0,
+        items: {
+          create: data.items.map((item) => ({
+            productId: item.productId,
+            productName: '商品',
+            productImage: '',
+            price: 0,
+            quantity: item.quantity,
+          })),
+        },
+      },
+      include: { items: true },
+    });
   }
 }
