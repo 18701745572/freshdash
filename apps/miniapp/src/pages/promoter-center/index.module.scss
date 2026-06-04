@@ -1,0 +1,148 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  background: $color-bg-page;
+  min-height: 100vh;
+  padding-bottom: $spacing-xl;
+}
+
+.header {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  padding: $spacing-xl $page-padding;
+  text-align: center;
+}
+
+.totalCommission {
+  font-size: 64rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.commissionLabel {
+  font-size: $font-size-md;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: $spacing-xs;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: $color-bg-card;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-md;
+  padding: $spacing-md 0;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  font-size: $font-size-xl;
+  color: $color-text-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.statLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $spacing-xs;
+}
+
+.card {
+  background: $color-bg-card;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.codeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.codeValue {
+  font-size: $font-size-xl;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+  font-family: monospace;
+}
+
+.copyBtn {
+  padding: 8rpx 24rpx;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  border-radius: $radius-button;
+}
+
+.posterBtn {
+  margin-top: $spacing-md;
+  height: 80rpx;
+  background: $color-promo-bg;
+  color: $color-promo-text;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recordItem {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.recordItem:last-child {
+  border-bottom: none;
+}
+
+.recordInfo {
+  flex: 1;
+}
+
+.recordName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.recordTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.recordAmount {
+  font-size: $font-size-md;
+  color: $color-price;
+  font-weight: $font-weight-semibold;
+}
+
+.withdrawBtn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 96rpx;
+  margin: $spacing-md $page-padding;
+  margin-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

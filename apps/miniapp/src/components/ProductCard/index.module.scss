@@ -1,0 +1,64 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.image {
+  width: 100%;
+  height: 300rpx;
+}
+
+.info {
+  padding: $spacing-sm;
+}
+
+.name {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  @include text-ellipsis;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin-top: $spacing-xs;
+}
+
+.tag {
+  font-size: $font-size-xs;
+  color: $color-tag-text;
+  background: $color-tag-bg;
+  padding: 2rpx 8rpx;
+  border-radius: $radius-xs;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  margin-top: $spacing-sm;
+}
+
+.price {
+  font-size: $font-size-lg;
+  color: $color-price;
+  font-weight: $font-weight-bold;
+}
+
+.originalPrice {
+  font-size: $font-size-sm;
+  color: $color-price-original;
+  text-decoration: line-through;
+  margin-left: $spacing-xs;
+}
+
+.unit {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-left: $spacing-xs;
+}

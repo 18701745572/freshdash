@@ -2,10 +2,10 @@
 // 主题配色变量（第二阶段模型可修改此文件）
 // ============================================
 
-// 品牌主题色：根据产品品牌定位修改
-$color-primary: #165dff;
-$color-primary-light: #4080ff;
-$color-primary-dark: #0e42d2;
+// 品牌主题色：生鲜绿
+$color-primary: #00b578;
+$color-primary-light: #4cd7a2;
+$color-primary-dark: #008f5d;
 
 // 功能色
 $color-success: #00b42a;
@@ -28,3 +28,11 @@ $color-text-white: #ffffff;
 // 边框色
 $color-border: #e5e6eb;
 $color-divider: #f2f3f5;
+
+// 业务相关变量
+$color-price: #f53f3f;
+$color-price-original: #c9cdd4;
+$color-tag-bg: #e8fff3;
+$color-tag-text: #00b578;
+$color-promo-bg: #fff7e8;
+$color-promo-text: #ff7d00;

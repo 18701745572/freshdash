@@ -1,11 +1,45 @@
 export default defineAppConfig({
   pages: [
-    'pages/index/index'
+    'pages/home/index',
+    'pages/category/index',
+    'pages/cart/index',
+    'pages/mine/index',
+    'pages/product-detail/index',
+    'pages/order-list/index',
+    'pages/order-detail/index',
+    'pages/address-list/index',
+    'pages/address-edit/index',
+    'pages/promoter-center/index',
+    'pages/promoter-poster/index',
   ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'MiniApp',
+    navigationBarTitleText: '鲜达生鲜',
     navigationBarTextStyle: 'black'
+  },
+  tabBar: {
+    color: '#86909c',
+    selectedColor: '#00b578',
+    backgroundColor: '#ffffff',
+    borderStyle: 'white',
+    list: [
+      {
+        pagePath: 'pages/home/index',
+        text: '首页'
+      },
+      {
+        pagePath: 'pages/category/index',
+        text: '分类'
+      },
+      {
+        pagePath: 'pages/cart/index',
+        text: '购物车'
+      },
+      {
+        pagePath: 'pages/mine/index',
+        text: '我的'
+      }
+    ]
   }
 })

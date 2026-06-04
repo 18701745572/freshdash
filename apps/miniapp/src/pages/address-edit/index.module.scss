@@ -1,0 +1,51 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  background: $color-bg-page;
+  min-height: 100vh;
+  padding: $spacing-md $page-padding;
+}
+
+.formItem {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  padding: $spacing-md;
+  margin-bottom: $spacing-sm;
+  border-radius: $radius-sm;
+}
+
+.label {
+  width: 160rpx;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.input {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.switchRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $color-bg-card;
+  padding: $spacing-md;
+  margin-bottom: $spacing-sm;
+  border-radius: $radius-sm;
+}
+
+.saveBtn {
+  margin-top: $spacing-xl;
+  height: 96rpx;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

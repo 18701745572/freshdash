@@ -1,0 +1,122 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  background: $color-bg-page;
+  min-height: 100vh;
+}
+
+.header {
+  background: linear-gradient(180deg, $color-primary 0%, $color-primary-dark 100%);
+  padding: $spacing-xl $page-padding;
+  padding-top: calc(#{$spacing-xl} + env(safe-area-inset-top));
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  margin-right: $spacing-md;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.nickName {
+  font-size: $font-size-xl;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.phone {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: $spacing-xs;
+}
+
+.orderSection {
+  background: $color-bg-card;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.orderTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.orderMore {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.orderStatusList {
+  display: flex;
+  justify-content: space-around;
+}
+
+.statusItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statusIcon {
+  font-size: 48rpx;
+  margin-bottom: $spacing-xs;
+}
+
+.statusLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.menuList {
+  background: $color-bg-card;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.menuItem:last-child {
+  border-bottom: none;
+}
+
+.menuIcon {
+  font-size: 40rpx;
+  margin-right: $spacing-md;
+}
+
+.menuText {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.menuArrow {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
