@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { mockCategoryTree, mockProducts } from '@/data/categories';
+import { mockCategoryTree } from '@/data/categories';
+import { mockProducts } from '@/data/products';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 

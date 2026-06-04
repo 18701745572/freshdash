@@ -448,6 +448,9 @@ importers:
       '@tarojs/plugin-framework-react':
         specifier: 3.6.23
         version: 3.6.23(@pmmmwh/react-refresh-webpack-plugin@0.5.17(react-refresh@0.14.2)(type-fest@2.19.0)(webpack-dev-server@4.15.2(bufferutil@4.1.0)(webpack@5.90.3(@swc/core@1.3.96)(postcss@8.5.15)))(webpack@5.90.3(@swc/core@1.3.96)(postcss@8.5.15)))(@tarojs/runtime@3.6.23(@tarojs/shared@3.6.23))(@tarojs/shared@3.6.23)(@tarojs/taro@3.6.23(@tarojs/helper@3.6.23)(@tarojs/runtime@3.6.23(@tarojs/shared@3.6.23))(@types/react@18.3.30)(postcss@8.5.15))(react-refresh@0.14.2)(react@18.3.1)
+      '@tarojs/plugin-platform-weapp':
+        specifier: 3.6.23
+        version: 3.6.23(@tarojs/components@3.6.23(@tarojs/helper@3.6.23)(@tarojs/runtime@3.6.23(@tarojs/shared@3.6.23))(@tarojs/shared@3.6.23)(@types/react@18.3.30)(postcss@8.5.15)(react@18.3.1))(@tarojs/shared@3.6.23)(@tarojs/taro@3.6.23(@tarojs/helper@3.6.23)(@tarojs/runtime@3.6.23(@tarojs/shared@3.6.23))(@types/react@18.3.30)(postcss@8.5.15))
       '@tarojs/react':
         specifier: 3.6.23
         version: 3.6.23(@tarojs/runtime@3.6.23(@tarojs/shared@3.6.23))(@tarojs/shared@3.6.23)(react@18.3.1)
