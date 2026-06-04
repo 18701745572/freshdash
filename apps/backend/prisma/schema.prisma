@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  openId    String   @unique @map("open_id")
+  nickName  String?  @map("nick_name")
+  avatarUrl String?  @map("avatar_url")
+  phone     String?
+  isPromoter Boolean @default(false) @map("is_promoter")
+  promoterCode String? @unique @map("promoter_code")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  orders    Order[]
+  commissions Commission[]
+
+  @@map("users")
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  name         String
+  coverImage   String   @map("cover_image")
+  price        Int
+  originalPrice Int?    @map("original_price")
+  unit         String
+  tags         String[]
+  categoryId   String   @map("category_id")
+  stock        Int      @default(0)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  orderItems   OrderItem[]
+
+  @@map("products")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  icon      String?
+  sort      Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("categories")
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  orderNo     String      @unique @map("order_no")
+  userId      String      @map("user_id")
+  status      OrderStatus @default(PENDING_PAYMENT)
+  totalAmount Int         @map("total_amount")
+  address     String?
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  user       User        @relation(fields: [userId], references: [id])
+  items      OrderItem[]
+  commission Commission?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String @map("order_id")
+  productId String @map("product_id")
+  productName String @map("product_name")
+  productImage String @map("product_image")
+  price     Int
+  quantity  Int
+
+  order   Order   @relation(fields: [orderId], references: [id])
+
+  @@map("order_items")
+}
+
+model Commission {
+  id           String @id @default(uuid())
+  orderId      String @unique @map("order_id")
+  promoterId   String @map("promoter_id")
+  amount       Int
+  status       CommissionStatus @default(PENDING)
+  settledAt    DateTime? @map("settled_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  order   Order @relation(fields: [orderId], references: [id])
+  promoter User @relation(fields: [promoterId], references: [id])
+
+  @@map("commissions")
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PENDING_DISPATCH
+  PENDING_SHIPMENT
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+enum CommissionStatus {
+  PENDING
+  SETTLED
+  WITHDRAWN
+}
