@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
-import { Table, Button, Tag, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Tag, Space, message } from 'antd';
+import { fetchProducts } from '../../services/api';
 
-const mockProducts = [
-  { id: '1', name: '烟台红富士苹果', price: 19.90, stock: 100, category: '水果', status: '上架' },
-  { id: '2', name: '进口香蕉', price: 8.90, stock: 200, category: '水果', status: '上架' },
-  { id: '3', name: '鲜活基围虾', price: 39.90, stock: 50, category: '海鲜', status: '上架' },
-];
+interface Product {
+  id: string;
+  name: string;
+  coverImage: string;
+  price: number;
+  originalPrice?: number;
+  stock: number;
+  categoryId: string;
+  status: string;
+}
 
 const ProductManage: React.FC = () => {
-  const [data] = useState(mockProducts);
+  const [data, setData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchProducts()
+      .then((res: any) => setData(res))
+      .catch((err) => message.error(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   const columns = [
     { title: '商品名称', dataIndex: 'name', key: 'name' },
-    { title: '分类', dataIndex: 'category', key: 'category' },
-    { title: '价格', dataIndex: 'price', key: 'price', render: (v: number) => `¥${v.toFixed(2)}` },
+    { title: '价格', dataIndex: 'price', key: 'price', render: (v: number) => `¥${(v / 100).toFixed(2)}` },
     { title: '库存', dataIndex: 'stock', key: 'stock' },
-    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color="green">{v}</Tag> },
+    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={v === '上架' ? 'green' : 'red'}>{v}</Tag> },
     {
       title: '操作',
       key: 'action',
@@ -33,7 +47,7 @@ const ProductManage: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Button type="primary">+ 新增商品</Button>
       </div>
-      <Table rowKey="id" columns={columns} dataSource={data} />
+      <Table rowKey="id" columns={columns} dataSource={data} loading={loading} />
     </div>
   );
 };

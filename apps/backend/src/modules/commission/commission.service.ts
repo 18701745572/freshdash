@@ -12,8 +12,21 @@ export class CommissionService {
     });
   }
 
+  findAllWithdrawals() {
+    return this.prisma.withdrawal.findMany({
+      include: { promoter: { include: { user: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   async applyWithdraw(promoterId: string, amount: number) {
-    // TODO: 校验可提现金额并创建提现记录
-    return { message: '提现申请已提交', promoterId, amount };
+    // TODO: 校验可提现金额、风控规则
+    return this.prisma.withdrawal.create({
+      data: {
+        promoterId,
+        amount,
+        status: 'PENDING',
+      },
+    });
   }
 }

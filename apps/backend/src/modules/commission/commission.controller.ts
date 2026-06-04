@@ -13,6 +13,12 @@ export class CommissionController {
     return this.commissionService.findByPromoter(promoterId);
   }
 
+  @Get('withdrawals')
+  @ApiOperation({ summary: '获取所有提现申请' })
+  findAllWithdrawals() {
+    return this.commissionService.findAllWithdrawals();
+  }
+
   @Post('withdraw')
   @ApiOperation({ summary: '申请提现' })
   applyWithdraw(@Body() body: { promoterId: string; amount: number }) {

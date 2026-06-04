@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
-import { Table, Button, Tag, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Tag, Space, message } from 'antd';
+import { fetchSuppliers } from '../../services/api';
 
-const mockSuppliers = [
-  { id: '1', name: '烟台果园直供', contact: '王经理 13800138001', status: '合作中', orderCount: 156 },
-  { id: '2', name: '青岛海鲜批发', contact: '李经理 13900139002', status: '合作中', orderCount: 89 },
-  { id: '3', name: '寿光蔬菜基地', contact: '张经理 13700137003', status: '待审核', orderCount: 0 },
-];
+interface Supplier {
+  id: string;
+  name: string;
+  contact: string;
+  status: string;
+  orderCount: number;
+}
 
 const SupplierManage: React.FC = () => {
-  const [data] = useState(mockSuppliers);
+  const [data, setData] = useState<Supplier[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchSuppliers()
+      .then((res: any) => setData(res))
+      .catch((err) => message.error(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   const columns = [
     { title: '供应商名称', dataIndex: 'name', key: 'name' },
     { title: '联系人', dataIndex: 'contact', key: 'contact' },
-    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={v === '合作中' ? 'green' : 'orange'}>{v}</Tag> },
+    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={v === 'ACTIVE' ? 'green' : 'orange'}>{v === 'ACTIVE' ? '合作中' : '待审核'}</Tag> },
     { title: '累计订单', dataIndex: 'orderCount', key: 'orderCount' },
     {
       title: '操作',
@@ -32,7 +44,7 @@ const SupplierManage: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Button type="primary">+ 新增供应商</Button>
       </div>
-      <Table rowKey="id" columns={columns} dataSource={data} />
+      <Table rowKey="id" columns={columns} dataSource={data} loading={loading} />
     </div>
   );
 };

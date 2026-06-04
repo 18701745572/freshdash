@@ -1,34 +1,52 @@
-import React, { useState } from 'react';
-import { Table, Button, Tag, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Tag, Space, message } from 'antd';
+import { fetchWithdrawals } from '../../services/api';
 
-const mockWithdrawals = [
-  { id: '1', promoter: '张三', amount: 45.80, method: '微信支付', applyTime: '2024-06-04 10:30', status: '待审核' },
-  { id: '2', promoter: '李四', amount: 120.00, method: '银行卡', applyTime: '2024-06-03 16:20', status: '已通过' },
-  { id: '3', promoter: '赵六', amount: 30.00, method: '微信支付', applyTime: '2024-06-02 09:15', status: '已拒绝' },
-];
+interface Withdrawal {
+  id: string;
+  promoter: { user: { nickName?: string } };
+  amount: number;
+  status: string;
+  createdAt: string;
+}
 
 const statusColors: Record<string, string> = {
-  '待审核': 'orange',
-  '已通过': 'green',
-  '已拒绝': 'red',
-  '已打款': 'blue',
+  PENDING: 'orange',
+  APPROVED: 'green',
+  REJECTED: 'red',
+  PAID: 'blue',
+};
+
+const statusLabels: Record<string, string> = {
+  PENDING: '待审核',
+  APPROVED: '已通过',
+  REJECTED: '已拒绝',
+  PAID: '已打款',
 };
 
 const WithdrawalManage: React.FC = () => {
-  const [data] = useState(mockWithdrawals);
+  const [data, setData] = useState<Withdrawal[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchWithdrawals()
+      .then((res: any) => setData(res))
+      .catch((err) => message.error(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   const columns = [
-    { title: '推广员', dataIndex: 'promoter', key: 'promoter' },
-    { title: '提现金额', dataIndex: 'amount', key: 'amount', render: (v: number) => `¥${v.toFixed(2)}` },
-    { title: '提现方式', dataIndex: 'method', key: 'method' },
-    { title: '申请时间', dataIndex: 'applyTime', key: 'applyTime' },
-    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={statusColors[v] || 'default'}>{v}</Tag> },
+    { title: '推广员', dataIndex: ['promoter', 'user', 'nickName'], key: 'promoter', render: (_: any, record: Withdrawal) => record.promoter?.user?.nickName || '-' },
+    { title: '提现金额', dataIndex: 'amount', key: 'amount', render: (v: number) => `¥${(v / 100).toFixed(2)}` },
+    { title: '申请时间', dataIndex: 'createdAt', key: 'createdAt' },
+    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={statusColors[v] || 'default'}>{statusLabels[v] || v}</Tag> },
     {
       title: '操作',
       key: 'action',
-      render: (_: any, record: any) => (
+      render: (_: any, record: Withdrawal) => (
         <Space>
-          {record.status === '待审核' && (
+          {record.status === 'PENDING' && (
             <>
               <Button type="link">通过</Button>
               <Button type="link" danger>拒绝</Button>
@@ -39,11 +57,7 @@ const WithdrawalManage: React.FC = () => {
     },
   ];
 
-  return (
-    <div>
-      <Table rowKey="id" columns={columns} dataSource={data} />
-    </div>
-  );
+  return <Table rowKey="id" columns={columns} dataSource={data} loading={loading} />;
 };
 
 export default WithdrawalManage;

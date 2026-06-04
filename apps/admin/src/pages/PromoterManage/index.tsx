@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
-import { Table, Button, Tag, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Tag, Space, message } from 'antd';
+import { fetchPromoters } from '../../services/api';
 
-const mockPromoters = [
-  { id: '1', name: '张三', phone: '13800138000', totalCommission: 125.80, referralCount: 23, status: '正常' },
-  { id: '2', name: '李四', phone: '13900139000', totalCommission: 68.50, referralCount: 12, status: '正常' },
-  { id: '3', name: '王五', phone: '13700137000', totalCommission: 0, referralCount: 0, status: '禁用' },
-];
+interface Promoter {
+  id: string;
+  user: { nickName?: string; phone?: string };
+  totalCommission: number;
+  balance: number;
+  status: string;
+}
 
 const PromoterManage: React.FC = () => {
-  const [data] = useState(mockPromoters);
+  const [data, setData] = useState<Promoter[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchPromoters()
+      .then((res: any) => setData(res))
+      .catch((err) => message.error(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   const columns = [
-    { title: '推广员', dataIndex: 'name', key: 'name' },
-    { title: '手机号', dataIndex: 'phone', key: 'phone' },
-    { title: '累计佣金', dataIndex: 'totalCommission', key: 'totalCommission', render: (v: number) => `¥${v.toFixed(2)}` },
-    { title: '推广人数', dataIndex: 'referralCount', key: 'referralCount' },
-    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={v === '正常' ? 'green' : 'red'}>{v}</Tag> },
+    { title: '推广员', dataIndex: ['user', 'nickName'], key: 'name', render: (_: any, record: Promoter) => record.user?.nickName || '-' },
+    { title: '手机号', dataIndex: ['user', 'phone'], key: 'phone', render: (_: any, record: Promoter) => record.user?.phone || '-' },
+    { title: '累计佣金', dataIndex: 'totalCommission', key: 'totalCommission', render: (v: number) => `¥${(v / 100).toFixed(2)}` },
+    { title: '余额', dataIndex: 'balance', key: 'balance', render: (v: number) => `¥${(v / 100).toFixed(2)}` },
+    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={v === 'ACTIVE' ? 'green' : 'red'}>{v === 'ACTIVE' ? '正常' : '禁用'}</Tag> },
     {
       title: '操作',
       key: 'action',
@@ -28,11 +40,7 @@ const PromoterManage: React.FC = () => {
     },
   ];
 
-  return (
-    <div>
-      <Table rowKey="id" columns={columns} dataSource={data} />
-    </div>
-  );
+  return <Table rowKey="id" columns={columns} dataSource={data} loading={loading} />;
 };
 
 export default PromoterManage;
