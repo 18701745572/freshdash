@@ -6,11 +6,12 @@ import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { CommissionModule } from './modules/commission/commission.module';
+import { CategoryModule } from './modules/category/category.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { PromoterModule } from './modules/promoter/promoter.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, ProductModule, OrderModule, CommissionModule, SupplierModule, PromoterModule],
+  imports: [PrismaModule, UserModule, ProductModule, CategoryModule, OrderModule, CommissionModule, SupplierModule, PromoterModule],
   providers: [
     {
       provide: APP_FILTER,
