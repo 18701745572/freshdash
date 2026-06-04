@@ -20,6 +20,7 @@ model User {
 
   orders    Order[]
   commissions Commission[]
+  promoter  Promoter?
 
   @@map("users")
 }
@@ -56,13 +57,17 @@ model Order {
   id          String      @id @default(uuid())
   orderNo     String      @unique @map("order_no")
   userId      String      @map("user_id")
+  supplierId  String?     @map("supplier_id")
   status      OrderStatus @default(PENDING_PAYMENT)
   totalAmount Int         @map("total_amount")
   address     String?
+  trackingNo  String?     @map("tracking_no")
+  shippedAt   DateTime?   @map("shipped_at")
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
 
   user       User        @relation(fields: [userId], references: [id])
+  supplier   Supplier?   @relation(fields: [supplierId], references: [id])
   items      OrderItem[]
   commission Commission?
 
@@ -111,4 +116,54 @@ enum CommissionStatus {
   PENDING
   SETTLED
   WITHDRAWN
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+model Supplier {
+  id        String   @id @default(uuid())
+  name      String
+  contact   String?
+  phone     String?
+  address   String?
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  orders    Order[]
+
+  @@map("suppliers")
+}
+
+model Promoter {
+  id             String   @id @default(uuid())
+  userId         String   @unique @map("user_id")
+  totalCommission Int     @default(0) @map("total_commission")
+  balance        Int      @default(0)
+  status         String   @default("ACTIVE")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user        User         @relation(fields: [userId], references: [id])
+  withdrawals Withdrawal[]
+
+  @@map("promoters")
+}
+
+model Withdrawal {
+  id          String           @id @default(uuid())
+  promoterId  String           @map("promoter_id")
+  amount      Int
+  status      WithdrawalStatus @default(PENDING)
+  reviewedAt  DateTime?        @map("reviewed_at")
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  promoter Promoter @relation(fields: [promoterId], references: [id])
+
+  @@map("withdrawals")
 }
