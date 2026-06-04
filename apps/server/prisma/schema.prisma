@@ -1,0 +1,247 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(cuid())
+  openid          String    @unique
+  unionid         String?
+  nickName        String?
+  avatarUrl       String?
+  phone           String?
+  role            UserRole  @default(user)
+  promoterCode    String?   @unique
+  promoterBoundAt DateTime?
+  balance         Int       @default(0)
+  totalCommission Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  orders          Order[]
+  addresses       Address[]
+  cartItems       CartItem[]
+  commissions     CommissionRecord[]
+  withdrawals     WithdrawRecord[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  user
+  promoter
+  supplier
+  admin
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  icon      String?
+  parentId  String?
+  sortOrder Int       @default(0)
+  products  Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            String      @id @default(cuid())
+  name          String
+  description   String?
+  coverImage    String
+  images        String[]
+  price         Int
+  originalPrice Int?
+  unit          String
+  stock         Int         @default(0)
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id])
+  tags          String[]
+  sortOrder     Int         @default(0)
+  status        ProductStatus @default(on_sale)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+
+  @@map("products")
+}
+
+enum ProductStatus {
+  on_sale
+  off_sale
+  deleted
+}
+
+model Address {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  name      String
+  phone     String
+  province  String
+  city      String
+  district  String
+  detail    String
+  isDefault Boolean @default(false)
+
+  @@map("addresses")
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+  selected  Boolean @default(true)
+
+  @@map("cart_items")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNo         String      @unique
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  status          OrderStatus @default(pending_payment)
+  totalAmount     Int
+  deliveryFee     Int         @default(0)
+  discountAmount  Int         @default(0)
+  payAmount       Int
+  addressSnapshot Json
+  promoterId      String?
+  commissionAmount Int?
+  remark          String?
+  createdAt       DateTime    @default(now())
+  paidAt          DateTime?
+  shippedAt       DateTime?
+  receivedAt      DateTime?
+  completedAt     DateTime?
+
+  items           OrderItem[]
+  dispatches      OrderDispatch[]
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  pending_payment
+  pending_dispatch
+  pending_shipment
+  shipped
+  completed
+  cancelled
+  refunded
+}
+
+model OrderItem {
+  id          String  @id @default(cuid())
+  orderId     String
+  order       Order   @relation(fields: [orderId], references: [id])
+  productId   String
+  productName String
+  productImage String
+  price       Int
+  quantity    Int
+  subtotal    Int
+
+  @@map("order_items")
+}
+
+model Supplier {
+  id          String    @id @default(cuid())
+  name        String
+  contactName String
+  phone       String
+  address     String
+  status      SupplierStatus @default(active)
+  createdAt   DateTime  @default(now())
+
+  dispatches  OrderDispatch[]
+
+  @@map("suppliers")
+}
+
+enum SupplierStatus {
+  active
+  inactive
+}
+
+model OrderDispatch {
+  id         String         @id @default(cuid())
+  orderId    String
+  order      Order          @relation(fields: [orderId], references: [id])
+  supplierId String
+  supplier   Supplier       @relation(fields: [supplierId], references: [id])
+  status     DispatchStatus @default(pending)
+  shippedAt  DateTime?
+  createdAt  DateTime       @default(now())
+
+  @@map("order_dispatches")
+}
+
+enum DispatchStatus {
+  pending
+  shipped
+  completed
+}
+
+model CommissionRecord {
+  id          String           @id @default(cuid())
+  promoterId  String
+  promoter    User             @relation(fields: [promoterId], references: [id])
+  orderId     String
+  amount      Int
+  status      CommissionStatus @default(pending)
+  createdAt   DateTime         @default(now())
+  settledAt   DateTime?
+
+  @@map("commission_records")
+}
+
+enum CommissionStatus {
+  pending
+  settled
+  deducted
+}
+
+model WithdrawRecord {
+  id          String           @id @default(cuid())
+  promoterId  String
+  promoter    User             @relation(fields: [promoterId], references: [id])
+  amount      Int
+  status      WithdrawStatus   @default(pending)
+  remark      String?
+  createdAt   DateTime         @default(now())
+
+  @@map("withdraw_records")
+}
+
+enum WithdrawStatus {
+  pending
+  approved
+  rejected
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  linkUrl   String?
+  sortOrder Int      @default(0)
+  status    BannerStatus @default(active)
+
+  @@map("banners")
+}
+
+enum BannerStatus {
+  active
+  inactive
+}
