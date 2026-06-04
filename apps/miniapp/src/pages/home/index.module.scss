@@ -1,0 +1,130 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  padding-bottom: $spacing-xl;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  height: 72rpx;
+  margin: $spacing-md $page-padding;
+  padding: 0 $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-round;
+  box-shadow: $shadow-card;
+}
+
+.searchIcon {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  margin-right: $spacing-sm;
+}
+
+.searchText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.categoryGrid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md 0;
+}
+
+.categoryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+  padding: $spacing-sm 0;
+}
+
+.categoryIcon {
+  font-size: 48rpx;
+  margin-bottom: $spacing-xs;
+}
+
+.categoryName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.seckillSection {
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.seckillHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.seckillTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.seckillMore {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.seckillList {
+  @include scroll-x-container;
+}
+
+.seckillItem {
+  @include scroll-x-item(240rpx);
+  text-align: center;
+}
+
+.seckillImage {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: $radius-sm;
+}
+
+.seckillName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  margin-top: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.seckillPrice {
+  font-size: $font-size-md;
+  color: $color-price;
+  font-weight: $font-weight-bold;
+}
+
+.seckillOriginal {
+  font-size: $font-size-xs;
+  color: $color-price-original;
+  text-decoration: line-through;
+}
+
+.recommendSection {
+  margin: $spacing-md $page-padding;
+}
+
+.recommendHeader {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.recommendGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+}

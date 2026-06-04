@@ -1,0 +1,137 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  padding-bottom: 140rpx;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  margin-top: $spacing-md;
+}
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  margin: $spacing-sm $page-padding;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+}
+
+.checkbox {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 2rpx solid $color-border;
+  margin-right: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkboxChecked {
+  background: $color-primary;
+  border-color: $color-primary;
+}
+
+.itemImage {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-sm;
+  margin-right: $spacing-md;
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.itemPrice {
+  font-size: $font-size-lg;
+  color: $color-price;
+  font-weight: $font-weight-bold;
+  margin-top: $spacing-sm;
+}
+
+.quantityControl {
+  display: flex;
+  align-items: center;
+  margin-top: $spacing-sm;
+}
+
+.qtyBtn {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+}
+
+.qtyValue {
+  width: 64rpx;
+  text-align: center;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.totalSection {
+  display: flex;
+  align-items: center;
+}
+
+.totalLabel {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.totalPrice {
+  font-size: $font-size-xl;
+  color: $color-price;
+  font-weight: $font-weight-bold;
+  margin-left: $spacing-sm;
+}
+
+.submitBtn {
+  height: 80rpx;
+  padding: 0 48rpx;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

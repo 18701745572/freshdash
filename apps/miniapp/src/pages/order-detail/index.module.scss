@@ -1,0 +1,96 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  background: $color-bg-page;
+  min-height: 100vh;
+  padding-bottom: $spacing-xl;
+}
+
+.statusBar {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  padding: $spacing-xl $page-padding;
+}
+
+.statusText {
+  font-size: $font-size-xxl;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.statusDesc {
+  font-size: $font-size-md;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: $spacing-xs;
+}
+
+.card {
+  background: $color-bg-card;
+  margin: $spacing-md $page-padding;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm 0;
+}
+
+.itemImage {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-sm;
+  margin-right: $spacing-md;
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.itemPrice {
+  font-size: $font-size-sm;
+  color: $color-price;
+  margin-top: $spacing-xs;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-xs 0;
+}
+
+.label {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.value {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  padding-top: $spacing-md;
+  margin-top: $spacing-md;
+  border-top: 1rpx solid $color-divider;
+}
+
+.totalValue {
+  font-size: $font-size-xl;
+  color: $color-price;
+  font-weight: $font-weight-bold;
+}

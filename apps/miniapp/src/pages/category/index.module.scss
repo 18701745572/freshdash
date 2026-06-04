@@ -1,0 +1,74 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200rpx;
+  background: $color-bg-page;
+  height: 100%;
+}
+
+.sidebarItem {
+  padding: $spacing-md $spacing-sm;
+  text-align: center;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  position: relative;
+}
+
+.sidebarItemActive {
+  background: $color-bg-card;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.sidebarItemActive::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 32rpx;
+  background: $color-primary;
+  border-radius: 0 4rpx 4rpx 0;
+}
+
+.content {
+  flex: 1;
+  padding: $spacing-md;
+  background: $color-bg-card;
+}
+
+.contentTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+}
+
+.productItem {
+  text-align: center;
+}
+
+.productImage {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-sm;
+}
+
+.productName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  margin-top: $spacing-xs;
+  @include text-ellipsis;
+}
