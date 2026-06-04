@@ -12,6 +12,9 @@ import {
 import Dashboard from './pages/Dashboard'
 import ProductManage from './pages/ProductManage'
 import OrderManage from './pages/OrderManage'
+import SupplierManage from './pages/SupplierManage'
+import PromoterManage from './pages/PromoterManage'
+import WithdrawalManage from './pages/WithdrawalManage'
 
 const { Header, Sider, Content } = Layout
 
@@ -68,9 +71,9 @@ function AppLayout() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<ProductManage />} />
             <Route path="/orders" element={<OrderManage />} />
-            <Route path="/suppliers" element={<div>供应商管理（待开发）</div>} />
-            <Route path="/promoters" element={<div>推广员管理（待开发）</div>} />
-            <Route path="/withdrawals" element={<div>提现审核（待开发）</div>} />
+            <Route path="/suppliers" element={<SupplierManage />} />
+            <Route path="/promoters" element={<PromoterManage />} />
+            <Route path="/withdrawals" element={<WithdrawalManage />} />
           </Routes>
         </Content>
       </Layout>
