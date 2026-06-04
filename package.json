@@ -7,8 +7,14 @@
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "db:up": "docker-compose up -d postgres redis",
-    "db:migrate": "pnpm --filter @freshdash/server prisma migrate dev",
-    "db:generate": "pnpm --filter @freshdash/server prisma generate"
+    "db:migrate": "pnpm --filter @freshdash/backend prisma migrate dev",
+    "db:generate": "pnpm --filter @freshdash/backend prisma generate",
+    "db:studio": "pnpm --filter @freshdash/backend prisma studio",
+    "db:seed": "pnpm --filter @freshdash/backend ts-node prisma/seed.ts",
+    "dev:backend": "pnpm --filter @freshdash/backend start:dev",
+    "dev:admin": "pnpm --filter @freshdash/admin dev",
+    "dev:miniapp": "pnpm --filter @freshdash/miniapp dev:weapp",
+    "dev:supplier": "pnpm --filter @freshdash/supplier-miniapp dev:weapp"
   },
   "devDependencies": {
     "typescript": "^5.3.0"
