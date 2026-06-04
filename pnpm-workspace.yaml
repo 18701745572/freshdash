@@ -2,6 +2,7 @@ packages:
   - 'apps/*'
   - 'packages/*'
 allowBuilds:
+  '@nestjs/core': set this to true or false
   '@parcel/watcher': set this to true or false
   '@prisma/client': set this to true or false
   '@prisma/engines': set this to true or false
@@ -16,3 +17,4 @@ allowBuilds:
   minidev: set this to true or false
   prisma: set this to true or false
   protobufjs: set this to true or false
+  swiper: set this to true or false

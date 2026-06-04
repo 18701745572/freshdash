@@ -38,7 +38,6 @@
     "@tarojs/components": "3.6.23",
     "@tarojs/helper": "3.6.23",
     "@tarojs/plugin-framework-react": "3.6.23",
-    "@tarojs/plugin-platform-weapp-qy": "0.0.14",
     "@tarojs/react": "3.6.23",
     "@tarojs/runtime": "3.6.23",
     "@tarojs/shared": "3.6.23",
