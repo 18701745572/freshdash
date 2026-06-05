@@ -1,49 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import BannerSwiper from '@/components/BannerSwiper';
 import ProductCard from '@/components/ProductCard';
-import { mockBanners } from '@/data/banners';
-import { mockCategories } from '@/data/categories';
-import { mockProducts, mockSeckillProducts } from '@/data/products';
+import { mockBanners, mockCategories, mockProducts, mockSeckillProducts } from '@/services';
+import { formatPrice } from '@/utils/price';
 import styles from './index.module.scss';
 
 const HomePage: React.FC = () => {
   const [products] = useState(mockProducts);
   const [seckillProducts] = useState(mockSeckillProducts);
 
-  useEffect(() => {
-    console.log('[Home] page mounted');
-  }, []);
-
   const handleProductClick = (id: string) => {
     Taro.navigateTo({ url: `/pages/product-detail/index?id=${id}` });
   };
 
-  const formatPrice = (price: number) => (price / 100).toFixed(2);
+  const handleSearch = () => {
+    Taro.navigateTo({ url: '/pages/search/index' });
+  };
+
+  const handleCategoryClick = (id: string) => {
+    Taro.switchTab({ url: '/pages/category/index' });
+    Taro.setStorageSync('active_category_id', id);
+  };
 
   return (
     <ScrollView scrollY className={styles.page}>
-      {/* 搜索栏 */}
-      <View className={styles.searchBar}>
+      <View className={styles.searchBar} onClick={handleSearch}>
         <Text className={styles.searchIcon}>🔍</Text>
         <Text className={styles.searchText}>搜索新鲜好物</Text>
       </View>
 
-      {/* Banner 轮播 */}
       <BannerSwiper banners={mockBanners} />
 
-      {/* 分类快捷入口 */}
       <View className={styles.categoryGrid}>
         {mockCategories.map((cat) => (
-          <View key={cat.id} className={styles.categoryItem}>
+          <View key={cat.id} className={styles.categoryItem} onClick={() => handleCategoryClick(cat.id)}>
             <Text className={styles.categoryIcon}>{cat.icon}</Text>
             <Text className={styles.categoryName}>{cat.name}</Text>
           </View>
         ))}
       </View>
 
-      {/* 限时秒杀 */}
       <View className={styles.seckillSection}>
         <View className={styles.seckillHeader}>
           <Text className={styles.seckillTitle}>⚡ 限时秒杀</Text>
@@ -63,7 +61,6 @@ const HomePage: React.FC = () => {
         </ScrollView>
       </View>
 
-      {/* 商品推荐 */}
       <View className={styles.recommendSection}>
         <Text className={styles.recommendHeader}>🌟 精选推荐</Text>
         <View className={styles.recommendGrid}>

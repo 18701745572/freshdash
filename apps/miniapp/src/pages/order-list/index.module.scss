@@ -5,6 +5,43 @@
   min-height: 100vh;
 }
 
+.tabBar {
+  display: flex;
+  white-space: nowrap;
+  background: $color-bg-card;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.tabItem {
+  display: inline-block;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.tabActive {
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  position: relative;
+}
+
+.tabActive::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background: $color-primary;
+  border-radius: 2rpx;
+}
+
+.orderList {
+  height: calc(100vh - 80rpx);
+}
+
 .empty {
   display: flex;
   flex-direction: column;

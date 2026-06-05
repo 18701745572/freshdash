@@ -5,18 +5,22 @@ export default defineAppConfig({
     'pages/cart/index',
     'pages/mine/index',
     'pages/product-detail/index',
+    'pages/search/index',
+    'pages/checkout/index',
     'pages/order-list/index',
     'pages/order-detail/index',
     'pages/address-list/index',
     'pages/address-edit/index',
+    'pages/promoter-apply/index',
     'pages/promoter-center/index',
     'pages/promoter-poster/index',
+    'pages/farm/index',
   ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
     navigationBarTitleText: '鲜达生鲜',
-    navigationBarTextStyle: 'black'
+    navigationBarTextStyle: 'black',
   },
   tabBar: {
     color: '#86909c',
@@ -24,22 +28,10 @@ export default defineAppConfig({
     backgroundColor: '#ffffff',
     borderStyle: 'white',
     list: [
-      {
-        pagePath: 'pages/home/index',
-        text: '首页'
-      },
-      {
-        pagePath: 'pages/category/index',
-        text: '分类'
-      },
-      {
-        pagePath: 'pages/cart/index',
-        text: '购物车'
-      },
-      {
-        pagePath: 'pages/mine/index',
-        text: '我的'
-      }
-    ]
-  }
-})
+      { pagePath: 'pages/home/index', text: '首页' },
+      { pagePath: 'pages/category/index', text: '分类' },
+      { pagePath: 'pages/cart/index', text: '购物车' },
+      { pagePath: 'pages/mine/index', text: '我的' },
+    ],
+  },
+});

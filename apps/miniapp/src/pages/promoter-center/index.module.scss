@@ -129,14 +129,25 @@
   font-weight: $font-weight-semibold;
 }
 
+.withdrawSection {
+  background: $color-bg-card;
+  margin: $spacing-md $page-padding $spacing-xl;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  padding-bottom: calc(#{$spacing-xl} + env(safe-area-inset-bottom));
+}
+
+.withdrawInput {
+  height: 80rpx;
+  padding: 0 $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  font-size: $font-size-md;
+  margin-bottom: $spacing-md;
+}
+
 .withdrawBtn {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 96rpx;
-  margin: $spacing-md $page-padding;
-  margin-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  height: 80rpx;
   background: $color-primary;
   color: $color-text-white;
   font-size: $font-size-md;

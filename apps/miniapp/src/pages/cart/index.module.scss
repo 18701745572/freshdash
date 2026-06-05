@@ -18,13 +18,36 @@
   margin-top: $spacing-md;
 }
 
+.swipeWrapper {
+  position: relative;
+  margin: $spacing-sm $page-padding;
+  overflow: hidden;
+  border-radius: $radius-md;
+}
+
+.deleteBtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 120rpx;
+  background: #ff4d4f;
+  color: $color-text-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-md;
+  border-radius: 0 $radius-md $radius-md 0;
+}
+
 .cartItem {
   display: flex;
   align-items: center;
   background: $color-bg-card;
-  margin: $spacing-sm $page-padding;
   padding: $spacing-md;
   border-radius: $radius-md;
+  position: relative;
+  transition: transform 0.15s ease;
 }
 
 .checkbox {
@@ -92,6 +115,30 @@
   color: $color-text-primary;
 }
 
+.discountBar {
+  position: fixed;
+  bottom: 120rpx;
+  left: 0;
+  right: 0;
+  background: #fff7e6;
+  color: #fa8c16;
+  font-size: $font-size-sm;
+  text-align: center;
+  padding: $spacing-xs 0;
+}
+
+.selectAllLabel {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  margin-right: $spacing-md;
+}
+
+.subtotalHint {
+  font-size: $font-size-xs;
+  color: $color-price;
+  margin-left: $spacing-xs;
+}
+
 .footer {
   position: fixed;
   bottom: 0;
@@ -99,7 +146,6 @@
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background: $color-bg-card;
   padding: $spacing-md $page-padding;
   padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));

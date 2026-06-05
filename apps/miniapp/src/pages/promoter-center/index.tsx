@@ -1,30 +1,29 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView } from '@tarojs/components';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import { usePromoterStore } from '@/stores/promoterStore';
+import { getPromoterCode } from '@/stores/promoterStore';
+import { formatPrice } from '@/utils/price';
 import styles from './index.module.scss';
 
-const mockStats = {
-  totalCommission: 12580,
-  settledAmount: 8000,
-  pendingAmount: 4580,
-  referralCount: 23,
-  orderCount: 45,
-};
-
-const mockRecords = [
-  { id: '1', name: '订单佣金', time: '2024-06-04 12:30', amount: 350 },
-  { id: '2', name: '订单佣金', time: '2024-06-03 10:15', amount: 280 },
-  { id: '3', name: '订单佣金', time: '2024-06-02 18:45', amount: 520 },
-];
-
 const PromoterCenterPage: React.FC = () => {
-  const [stats] = useState(mockStats);
-  const [records] = useState(mockRecords);
+  const stats = usePromoterStore((s) => s.stats);
+  const records = usePromoterStore((s) => s.records);
+  const withdraw = usePromoterStore((s) => s.withdraw);
+  const isPromoter = usePromoterStore((s) => s.isPromoter);
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const code = getPromoterCode();
 
-  const formatPrice = (price: number) => (price / 100).toFixed(2);
+  useEffect(() => {
+    if (!isPromoter) {
+      Taro.redirectTo({ url: '/pages/promoter-apply/index' });
+    }
+  }, [isPromoter]);
+
+  if (!isPromoter) return null;
 
   const handleCopy = () => {
-    Taro.setClipboardData({ data: 'FRESH2024' });
+    Taro.setClipboardData({ data: code });
   };
 
   const handlePoster = () => {
@@ -32,15 +31,18 @@ const PromoterCenterPage: React.FC = () => {
   };
 
   const handleWithdraw = () => {
-    Taro.showModal({
-      title: '申请提现',
-      content: `可提现金额：¥${formatPrice(stats.pendingAmount)}`,
-      success: (res) => {
-        if (res.confirm) {
-          Taro.showToast({ title: '申请已提交', icon: 'success' });
-        }
-      },
-    });
+    const amount = Math.round(parseFloat(withdrawAmount) * 100);
+    if (isNaN(amount) || amount <= 0) {
+      Taro.showToast({ title: '请输入提现金额', icon: 'none' });
+      return;
+    }
+    const result = withdraw(amount);
+    if (result.success) {
+      Taro.showToast({ title: '提现申请已提交', icon: 'success' });
+      setWithdrawAmount('');
+    } else {
+      Taro.showToast({ title: result.message || '提现失败', icon: 'none' });
+    }
   };
 
   return (
@@ -68,7 +70,7 @@ const PromoterCenterPage: React.FC = () => {
       <View className={styles.card}>
         <Text className={styles.cardTitle}>我的推广码</Text>
         <View className={styles.codeRow}>
-          <Text className={styles.codeValue}>FRESH2024</Text>
+          <Text className={styles.codeValue}>{code}</Text>
           <View className={styles.copyBtn} onClick={handleCopy}>复制</View>
         </View>
         <View className={styles.posterBtn} onClick={handlePoster}>生成推广海报</View>
@@ -87,7 +89,17 @@ const PromoterCenterPage: React.FC = () => {
         ))}
       </View>
 
-      <View className={styles.withdrawBtn} onClick={handleWithdraw}>申请提现</View>
+      <View className={styles.withdrawSection}>
+        <Text className={styles.cardTitle}>申请提现（最低10元）</Text>
+        <Input
+          className={styles.withdrawInput}
+          placeholder="请输入提现金额"
+          type="digit"
+          value={withdrawAmount}
+          onInput={(e) => setWithdrawAmount(e.detail.value)}
+        />
+        <View className={styles.withdrawBtn} onClick={handleWithdraw}>申请提现</View>
+      </View>
     </ScrollView>
   );
 };
