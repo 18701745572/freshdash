@@ -12,6 +12,9 @@ import { SupplierModule } from './modules/supplier/supplier.module';
 import { PromoterModule } from './modules/promoter/promoter.module';
 import { AddressModule } from './modules/address/address.module';
 import { CartModule } from './modules/cart/cart.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { RiskModule } from './modules/risk/risk.module';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { CartModule } from './modules/cart/cart.module';
     PromoterModule,
     AddressModule,
     CartModule,
+    PaymentModule,
+    DashboardModule,
+    RiskModule,
   ],
   providers: [
     {

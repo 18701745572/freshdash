@@ -3,8 +3,56 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PromoterService } from './promoter.service';
 
 @ApiTags('推广员')
-@Controller('promoters')
+@Controller('promoter')
 export class PromoterController {
+  constructor(private readonly promoterService: PromoterService) {}
+
+  @Post('sms-code')
+  @ApiOperation({ summary: '发送验证码' })
+  sendSmsCode(@Body() body: { phone: string }) {
+    return this.promoterService.sendSmsCode(body.phone);
+  }
+
+  @Post('apply')
+  @ApiOperation({ summary: '申请成为推广员' })
+  apply(@Body() body: { userId: string; phone: string; code: string }) {
+    return this.promoterService.apply(body.userId, body.phone, body.code);
+  }
+
+  @Post('bind')
+  @ApiOperation({ summary: '绑定推广员' })
+  bind(@Body() body: { userId: string; promoterCode: string }) {
+    return this.promoterService.bind(body.userId, body.promoterCode);
+  }
+
+  @Get('me')
+  @ApiOperation({ summary: '获取当前用户推广员信息' })
+  getMe(@Body('userId') userId: string) {
+    return this.promoterService.findByUserId(userId);
+  }
+
+  @Get(':id/qrcode')
+  @ApiOperation({ summary: '获取推广二维码' })
+  getQrcode(@Param('id') id: string) {
+    return this.promoterService.getQrcode(id);
+  }
+
+  @Get('commissions')
+  @ApiOperation({ summary: '获取我的佣金记录' })
+  getMyCommissions(@Body('promoterId') promoterId: string) {
+    return this.promoterService.findCommissions(promoterId);
+  }
+
+  @Post('withdraw')
+  @ApiOperation({ summary: '申请提现' })
+  withdraw(@Body() body: { promoterId: string; amount: number }) {
+    return this.promoterService.applyWithdraw(body.promoterId, body.amount);
+  }
+}
+
+@ApiTags('后台-推广员管理')
+@Controller('admin/promoters')
+export class AdminPromoterController {
   constructor(private readonly promoterService: PromoterService) {}
 
   @Get()
@@ -17,17 +65,5 @@ export class PromoterController {
   @ApiOperation({ summary: '获取推广员详情' })
   findOne(@Param('id') id: string) {
     return this.promoterService.findOne(id);
-  }
-
-  @Get(':id/commissions')
-  @ApiOperation({ summary: '获取推广员佣金记录' })
-  findCommissions(@Param('id') id: string) {
-    return this.promoterService.findCommissions(id);
-  }
-
-  @Post(':id/withdraw')
-  @ApiOperation({ summary: '推广员申请提现' })
-  withdraw(@Param('id') id: string, @Body() body: { amount: number }) {
-    return this.promoterService.applyWithdraw(id, body.amount);
   }
 }
