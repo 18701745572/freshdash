@@ -61,6 +61,7 @@ model Order {
   status      OrderStatus @default(PENDING_PAYMENT)
   totalAmount Int         @map("total_amount")
   address     String?
+  remark      String?
   trackingNo  String?     @map("tracking_no")
   shippedAt   DateTime?   @map("shipped_at")
   createdAt   DateTime    @default(now()) @map("created_at")
@@ -127,14 +128,16 @@ enum WithdrawalStatus {
 }
 
 model Supplier {
-  id        String   @id @default(uuid())
-  name      String
-  contact   String?
-  phone     String?
-  address   String?
-  status    String   @default("ACTIVE")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id           String   @id @default(uuid())
+  name         String
+  username     String?  @unique
+  passwordHash String?  @map("password_hash")
+  contact      String?
+  phone        String?
+  address      String?
+  status       String   @default("ACTIVE")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   orders    Order[]
 
