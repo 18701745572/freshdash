@@ -10,9 +10,23 @@ import { CategoryModule } from './modules/category/category.module';
 import { BannerModule } from './modules/banner/banner.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { PromoterModule } from './modules/promoter/promoter.module';
+import { AddressModule } from './modules/address/address.module';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, ProductModule, CategoryModule, BannerModule, OrderModule, CommissionModule, SupplierModule, PromoterModule],
+  imports: [
+    PrismaModule,
+    UserModule,
+    ProductModule,
+    CategoryModule,
+    BannerModule,
+    OrderModule,
+    CommissionModule,
+    SupplierModule,
+    PromoterModule,
+    AddressModule,
+    CartModule,
+  ],
   providers: [
     {
       provide: APP_FILTER,
