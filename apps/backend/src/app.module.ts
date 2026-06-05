@@ -15,6 +15,8 @@ import { CartModule } from './modules/cart/cart.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { RiskModule } from './modules/risk/risk.module';
+import { QueueModule } from './modules/queue/queue.module';
+import { ExportModule } from './modules/export/export.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { RiskModule } from './modules/risk/risk.module';
     PaymentModule,
     DashboardModule,
     RiskModule,
+    QueueModule,
+    ExportModule,
   ],
   providers: [
     {

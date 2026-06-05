@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 
@@ -70,5 +70,29 @@ export class SupplierOrderController {
   @ApiOperation({ summary: '商家发货' })
   ship(@Param('id') dispatchId: string, @Body('trackingNo') trackingNo?: string) {
     return this.orderService.ship(dispatchId, trackingNo);
+  }
+}
+
+@ApiTags('后台-订单管理')
+@Controller('admin/orders')
+export class AdminOrderController {
+  constructor(private readonly orderService: OrderService) {}
+
+  @Post('auto-dispatch/:id')
+  @ApiOperation({ summary: '一键自动派单' })
+  autoDispatch(@Param('id') id: string) {
+    return this.orderService.autoDispatch(id);
+  }
+
+  @Post('batch-auto-dispatch')
+  @ApiOperation({ summary: '批量一键派单' })
+  batchAutoDispatch(@Body() body: { orderIds: string[] }) {
+    return this.orderService.batchAutoDispatch(body.orderIds);
+  }
+
+  @Delete('dispatch/:id')
+  @ApiOperation({ summary: '撤销派单' })
+  revokeDispatch(@Param('id') id: string) {
+    return this.orderService.revokeDispatch(id);
   }
 }

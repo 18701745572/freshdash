@@ -1,9 +1,13 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { QueueService } from '../queue/queue.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private queueService: QueueService,
+  ) {}
 
   findAll(userId: string, status?: string) {
     const where: any = { userId };
@@ -30,7 +34,6 @@ export class OrderService {
     addressId?: string;
     remark?: string;
   }) {
-    // Fetch products with stock validation
     const productIds = data.items.map((item) => item.productId);
     const products = await this.prisma.product.findMany({
       where: { id: { in: productIds } },
@@ -40,7 +43,6 @@ export class OrderService {
       throw new BadRequestException('部分商品不存在');
     }
 
-    // Check stock and calculate total
     let totalAmount = 0;
     const orderItems = [];
 
@@ -62,11 +64,9 @@ export class OrderService {
       });
     }
 
-    // Calculate discount
     const discountAmount = await this.calculateDiscount(totalAmount);
     const finalAmount = totalAmount - discountAmount;
 
-    // Get address snapshot if provided
     let addressSnapshot = '';
     if (data.addressId) {
       const address = await this.prisma.address.findUnique({
@@ -77,9 +77,7 @@ export class OrderService {
       }
     }
 
-    // Create order with transaction
     const order = await this.prisma.$transaction(async (tx) => {
-      // Deduct stock
       for (const item of data.items) {
         await tx.product.update({
           where: { id: item.productId },
@@ -87,7 +85,6 @@ export class OrderService {
         });
       }
 
-      // Create order
       return tx.order.create({
         data: {
           orderNo: `XD${Date.now()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
@@ -101,6 +98,11 @@ export class OrderService {
         },
         include: { items: true },
       });
+    });
+
+    await this.queueService.add('cancelOrder', {
+      orderId: order.id,
+      delay: 30 * 60 * 1000,
     });
 
     return {
@@ -146,10 +148,20 @@ export class OrderService {
       throw new BadRequestException('订单状态不允许支付');
     }
 
-    return this.prisma.order.update({
+    const pendingJobs = this.queueService.getJobs('cancelOrder');
+    for (const job of pendingJobs) {
+      if (job.data.orderId === orderId) {
+        await this.queueService.remove(job.id);
+        break;
+      }
+    }
+
+    await this.prisma.order.update({
       where: { id: orderId },
       data: { status: 'PENDING_DISPATCH' },
     });
+
+    return await this.prisma.order.findUnique({ where: { id: orderId } });
   }
 
   async cancel(orderId: string, userId: string) {
@@ -164,7 +176,14 @@ export class OrderService {
       throw new BadRequestException('订单状态不允许取消');
     }
 
-    // Restore stock
+    const pendingJobs = this.queueService.getJobs('cancelOrder');
+    for (const job of pendingJobs) {
+      if (job.data.orderId === orderId) {
+        await this.queueService.remove(job.id);
+        break;
+      }
+    }
+
     await this.prisma.$transaction(async (tx) => {
       const items = await tx.orderItem.findMany({ where: { orderId } });
       for (const item of items) {
@@ -195,10 +214,17 @@ export class OrderService {
       throw new BadRequestException('订单状态不允许确认收货');
     }
 
-    return this.prisma.order.update({
+    await this.prisma.order.update({
       where: { id: orderId },
       data: { status: 'COMPLETED' },
     });
+
+    await this.queueService.add('settleCommission', {
+      orderId: orderId,
+      delay: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return await this.prisma.order.findUnique({ where: { id: orderId } });
   }
 
   async dispatch(orderId: string, supplierId: string) {
@@ -233,7 +259,6 @@ export class OrderService {
         data: { status: 'SHIPPED', trackingNo, shippedAt: new Date() },
       });
 
-      // Check if all dispatches are shipped
       const remaining = await tx.orderDispatch.count({
         where: { orderId: dispatch.orderId, status: { not: 'SHIPPED' } },
       });
@@ -255,5 +280,91 @@ export class OrderService {
       include: { items: true },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async autoDispatch(orderId: string) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: { items: { include: { product: true } } },
+    });
+
+    if (!order) {
+      throw new BadRequestException('订单不存在');
+    }
+    if (order.status !== 'PENDING_DISPATCH') {
+      throw new BadRequestException('订单状态不允许派单');
+    }
+
+    const groups = order.items.reduce((acc, item) => {
+      const supplierId = item.product.supplierId;
+      if (!acc[supplierId]) {
+        acc[supplierId] = [];
+      }
+      acc[supplierId].push(item);
+      return acc;
+    }, {} as Record<string, typeof order.items>);
+
+    const dispatchResults = [];
+
+    for (const supplierId of Object.keys(groups)) {
+      const dispatch = await this.prisma.orderDispatch.create({
+        data: {
+          orderId,
+          supplierId,
+          status: 'PENDING',
+        },
+      });
+      dispatchResults.push(dispatch);
+    }
+
+    const pendingDispatches = await this.prisma.orderDispatch.count({
+      where: { orderId, status: 'PENDING' },
+    });
+
+    const newStatus = pendingDispatches === 0 ? 'PENDING_SHIPMENT' : 'PENDING_DISPATCH';
+    await this.prisma.order.update({
+      where: { id: orderId },
+      data: { status: newStatus },
+    });
+
+    return {
+      success: true,
+      dispatchedCount: dispatchResults.length,
+      dispatches: dispatchResults,
+    };
+  }
+
+  async batchAutoDispatch(orderIds: string[]) {
+    const results = [];
+
+    for (const orderId of orderIds) {
+      try {
+        const result = await this.autoDispatch(orderId);
+        results.push({ orderId, success: true, ...result });
+      } catch (error) {
+        results.push({ orderId, success: false, error: error.message });
+      }
+    }
+
+    return results;
+  }
+
+  async revokeDispatch(dispatchId: string) {
+    const dispatch = await this.prisma.orderDispatch.findUnique({
+      where: { id: dispatchId },
+    });
+
+    if (!dispatch) {
+      throw new BadRequestException('派单记录不存在');
+    }
+    if (dispatch.status === 'SHIPPED') {
+      throw new BadRequestException('已发货的派单不能撤销');
+    }
+
+    await this.prisma.orderDispatch.delete({
+      where: { id: dispatchId },
+    });
+
+    return { success: true };
   }
 }

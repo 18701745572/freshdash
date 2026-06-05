@@ -36,12 +36,14 @@ model Product {
   unit         String
   tags         String[]
   categoryId   String   @map("category_id")
+  supplierId   String   @map("supplier_id")
   stock        Int      @default(0)
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   orderItems   OrderItem[]
   cartItems    CartItem[]
+  supplier     Supplier @relation(fields: [supplierId], references: [id])
 
   @@map("products")
 }
