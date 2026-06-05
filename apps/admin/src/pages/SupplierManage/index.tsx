@@ -1,39 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Table, Button, Tag, Space, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { fetchSuppliers } from '../../services/api';
+import type { AdminSupplier } from '../../types';
 
-interface Supplier {
-  id: string;
-  name: string;
-  contact: string;
-  status: string;
-  orderCount: number;
-}
-
-const SupplierManage: React.FC = () => {
-  const [data, setData] = useState<Supplier[]>([]);
+export default function SupplierManage() {
+  const navigate = useNavigate();
+  const [data, setData] = useState<AdminSupplier[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
-  useEffect(() => {
+  const loadData = useCallback(() => {
     setLoading(true);
-    fetchSuppliers()
-      .then((res: any) => setData(res))
+    fetchSuppliers({ page, pageSize: 10 })
+      .then((res) => {
+        setData(res.list);
+        setTotal(res.total);
+      })
       .catch((err) => message.error(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const columns = [
-    { title: '供应商名称', dataIndex: 'name', key: 'name' },
-    { title: '联系人', dataIndex: 'contact', key: 'contact' },
-    { title: '状态', dataIndex: 'status', key: 'status', render: (v: string) => <Tag color={v === 'ACTIVE' ? 'green' : 'orange'}>{v === 'ACTIVE' ? '合作中' : '待审核'}</Tag> },
-    { title: '累计订单', dataIndex: 'orderCount', key: 'orderCount' },
+    { title: '供应商名称', dataIndex: 'name' },
+    { title: '联系人', dataIndex: 'contactName' },
+    { title: '手机号', dataIndex: 'phone' },
+    { title: '登录账号', dataIndex: 'loginName' },
+    {
+      title: '账号状态',
+      dataIndex: 'status',
+      render: (v: string) => <Tag color={v === 'ACTIVE' ? 'green' : 'orange'}>{v === 'ACTIVE' ? '正常' : '已禁用'}</Tag>,
+    },
+    { title: '创建时间', dataIndex: 'createdAt' },
     {
       title: '操作',
       key: 'action',
-      render: () => (
+      render: (_: unknown, record: AdminSupplier) => (
         <Space>
-          <Button type="link">编辑</Button>
-          <Button type="link">查看订单</Button>
+          <Button type="link" onClick={() => navigate(`/suppliers/${record.id}/edit`)}>编辑</Button>
         </Space>
       ),
     },
@@ -41,12 +51,16 @@ const SupplierManage: React.FC = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary">+ 新增供应商</Button>
-      </div>
-      <Table rowKey="id" columns={columns} dataSource={data} loading={loading} />
+      <Button type="primary" icon={<PlusOutlined />} style={{ marginBottom: 16 }} onClick={() => navigate('/suppliers/new')}>
+        新增供应商
+      </Button>
+      <Table
+        rowKey="id"
+        columns={columns}
+        dataSource={data}
+        loading={loading}
+        pagination={{ current: page, total, onChange: setPage }}
+      />
     </div>
   );
-};
-
-export default SupplierManage;
+}

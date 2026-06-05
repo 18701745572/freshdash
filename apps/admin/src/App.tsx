@@ -1,92 +1,65 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { Button, Layout, Menu, theme } from 'antd'
-import {
-  DashboardOutlined,
-  ShoppingOutlined,
-  TeamOutlined,
-  TruckOutlined,
-  UserOutlined,
-  PayCircleOutlined
-} from '@ant-design/icons'
-import Dashboard from './pages/Dashboard'
-import ProductManage from './pages/ProductManage'
-import OrderManage from './pages/OrderManage'
-import SupplierManage from './pages/SupplierManage'
-import PromoterManage from './pages/PromoterManage'
-import WithdrawalManage from './pages/WithdrawalManage'
-
-const { Header, Sider, Content } = Layout
-
-const menuItems = [
-  { key: '/', icon: <DashboardOutlined />, label: '经营看板' },
-  { key: '/products', icon: <ShoppingOutlined />, label: '商品管理' },
-  { key: '/orders', icon: <TruckOutlined />, label: '订单管理' },
-  { key: '/suppliers', icon: <TeamOutlined />, label: '供应商管理' },
-  { key: '/promoters', icon: <UserOutlined />, label: '推广员管理' },
-  { key: '/withdrawals', icon: <PayCircleOutlined />, label: '提现审核' },
-]
-
-function AppLayout() {
-  const [collapsed, setCollapsed] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken()
-
-  return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div style={{ height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)' }} />
-        <Menu
-          theme="dark"
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          items={menuItems}
-          onClick={({ key }) => navigate(key)}
-        />
-      </Sider>
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Button
-            type="text"
-            onClick={() => setCollapsed(!collapsed)}
-            style={{ fontSize: '16px', width: 64, height: 64 }}
-          >
-            {collapsed ? '展开' : '收起'}
-          </Button>
-          <span style={{ fontSize: 18, fontWeight: 600 }}>鲜达生鲜 - 管理后台</span>
-        </Header>
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/products" element={<ProductManage />} />
-            <Route path="/orders" element={<OrderManage />} />
-            <Route path="/suppliers" element={<SupplierManage />} />
-            <Route path="/promoters" element={<PromoterManage />} />
-            <Route path="/withdrawals" element={<WithdrawalManage />} />
-          </Routes>
-        </Content>
-      </Layout>
-    </Layout>
-  )
-}
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/locale/zh_CN';
+import AuthGuard from './components/AuthGuard';
+import AdminLayout from './layouts/AdminLayout';
+import LoginPage from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import ProductManage from './pages/ProductManage';
+import ProductForm from './pages/ProductForm';
+import OrderManage from './pages/OrderManage';
+import OrderDetail from './pages/OrderDetail';
+import SupplierManage from './pages/SupplierManage';
+import SupplierForm from './pages/SupplierForm';
+import PromoterManage from './pages/PromoterManage';
+import PromoterCommissions from './pages/PromoterCommissions';
+import WithdrawalManage from './pages/WithdrawalManage';
+import DiscountRules from './pages/DiscountRules';
+import BannerManage from './pages/BannerManage';
+import FarmPlots from './pages/FarmPlots';
+import FarmPlotForm from './pages/FarmPlotForm';
+import FarmLogs from './pages/FarmLogs';
+import FarmOrders from './pages/FarmOrders';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppLayout />
-    </BrowserRouter>
-  )
+    <ConfigProvider locale={zhCN}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            element={
+              <AuthGuard>
+                <AdminLayout />
+              </AuthGuard>
+            }
+          >
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<ProductManage />} />
+            <Route path="/products/new" element={<ProductForm />} />
+            <Route path="/products/:id/edit" element={<ProductForm />} />
+            <Route path="/orders" element={<OrderManage />} />
+            <Route path="/orders/:id" element={<OrderDetail />} />
+            <Route path="/suppliers" element={<SupplierManage />} />
+            <Route path="/suppliers/new" element={<SupplierForm />} />
+            <Route path="/suppliers/:id/edit" element={<SupplierForm />} />
+            <Route path="/promoters" element={<PromoterManage />} />
+            <Route path="/promoters/:id/commissions" element={<PromoterCommissions />} />
+            <Route path="/withdrawals" element={<WithdrawalManage />} />
+            <Route path="/discount-rules" element={<DiscountRules />} />
+            <Route path="/banners" element={<BannerManage />} />
+            <Route path="/farm-plots" element={<FarmPlots />} />
+            <Route path="/farm-plots/new" element={<FarmPlotForm />} />
+            <Route path="/farm-plots/:id/edit" element={<FarmPlotForm />} />
+            <Route path="/farm-plots/:id/logs" element={<FarmLogs />} />
+            <Route path="/farm-orders" element={<FarmOrders />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ConfigProvider>
+  );
 }
 
-export default App
+export default App;
