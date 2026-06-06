@@ -35,7 +35,7 @@ const OrderDetailPage: React.FC = () => {
     Taro.showLoading({ title: '支付中...' });
     setTimeout(() => {
       Taro.hideLoading();
-      updateStatus(order.id, 'pending_dispatch');
+      updateStatus(order.id, 'shipped');
       Taro.showToast({ title: '支付成功', icon: 'success' });
     }, 1000);
   };

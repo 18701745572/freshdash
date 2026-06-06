@@ -46,7 +46,7 @@ const CheckoutPage: React.FC = () => {
     Taro.showLoading({ title: '支付中...' });
     setTimeout(() => {
       Taro.hideLoading();
-      updateStatus(order.id, 'pending_dispatch');
+      updateStatus(order.id, 'shipped');
       Taro.showToast({ title: '支付成功', icon: 'success' });
       setTimeout(() => {
         Taro.redirectTo({ url: `/pages/order-detail/index?id=${order.id}` });
