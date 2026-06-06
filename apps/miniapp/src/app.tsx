@@ -28,6 +28,7 @@ function App(props) {
     const promoterCode = options?.query?.promoterCode as string | undefined;
     if (promoterCode) {
       bindPromoter(promoterCode);
+      Taro.showToast({ title: '推广员绑定成功', icon: 'success' });
     }
   });
 
