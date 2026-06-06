@@ -7,6 +7,12 @@ import { SupplierService } from './supplier.service';
 export class SupplierController {
   constructor(private readonly supplierService: SupplierService) {}
 
+  @Post('login')
+  @ApiOperation({ summary: '供应商登录' })
+  login(@Body() body: { username: string; password: string }) {
+    return this.supplierService.login(body.username, body.password);
+  }
+
   @Get()
   @ApiOperation({ summary: '获取供应商列表' })
   findAll() {

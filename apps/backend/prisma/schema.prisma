@@ -21,6 +21,8 @@ model User {
   orders    Order[]
   commissions Commission[]
   promoter  Promoter?
+  addresses Address[]
+  cart      Cart?
 
   @@map("users")
 }
@@ -34,11 +36,14 @@ model Product {
   unit         String
   tags         String[]
   categoryId   String   @map("category_id")
+  supplierId   String   @map("supplier_id")
   stock        Int      @default(0)
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   orderItems   OrderItem[]
+  cartItems    CartItem[]
+  supplier     Supplier @relation(fields: [supplierId], references: [id])
 
   @@map("products")
 }
@@ -71,6 +76,7 @@ model Order {
   supplier   Supplier?   @relation(fields: [supplierId], references: [id])
   items      OrderItem[]
   commission Commission?
+  dispatches OrderDispatch[]
 
   @@map("orders")
 }
@@ -183,4 +189,73 @@ model Banner {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("banners")
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  name      String
+  phone     String
+  province  String
+  city      String
+  district  String
+  detail    String
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("addresses")
+}
+
+model Cart {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User      @relation(fields: [userId], references: [id])
+  items CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String   @map("cart_id")
+  productId String   @map("product_id")
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("cart_items")
+}
+
+model DiscountRule {
+  id        String   @id @default(uuid())
+  name      String
+  isActive  Boolean  @default(true) @map("is_active")
+  tiers     Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("discount_rules")
+}
+
+model OrderDispatch {
+  id         String   @id @default(uuid())
+  orderId    String   @map("order_id")
+  supplierId String   @map("supplier_id")
+  status     String   @default("PENDING")
+  trackingNo String?  @map("tracking_no")
+  shippedAt  DateTime? @map("shipped_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  order    Order    @relation(fields: [orderId], references: [id])
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+
+  @@map("order_dispatches")
 }

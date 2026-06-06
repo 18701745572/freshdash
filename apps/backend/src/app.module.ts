@@ -10,9 +10,33 @@ import { CategoryModule } from './modules/category/category.module';
 import { BannerModule } from './modules/banner/banner.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { PromoterModule } from './modules/promoter/promoter.module';
+import { AddressModule } from './modules/address/address.module';
+import { CartModule } from './modules/cart/cart.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { RiskModule } from './modules/risk/risk.module';
+import { QueueModule } from './modules/queue/queue.module';
+import { ExportModule } from './modules/export/export.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, ProductModule, CategoryModule, BannerModule, OrderModule, CommissionModule, SupplierModule, PromoterModule],
+  imports: [
+    PrismaModule,
+    UserModule,
+    ProductModule,
+    CategoryModule,
+    BannerModule,
+    OrderModule,
+    CommissionModule,
+    SupplierModule,
+    PromoterModule,
+    AddressModule,
+    CartModule,
+    PaymentModule,
+    DashboardModule,
+    RiskModule,
+    QueueModule,
+    ExportModule,
+  ],
   providers: [
     {
       provide: APP_FILTER,
