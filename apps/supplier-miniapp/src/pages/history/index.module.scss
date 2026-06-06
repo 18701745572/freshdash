@@ -1,0 +1,12 @@
+@import '../../styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-color;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.list {
+  padding-bottom: 40rpx;
+}

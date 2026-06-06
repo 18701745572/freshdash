@@ -1,0 +1,45 @@
+@import '../../styles/variables.scss';
+
+.card {
+  background: $card-bg;
+  border-radius: $border-radius;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.orderNo {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: $text-color;
+}
+
+.status {
+  font-size: 24rpx;
+  color: $primary-color;
+}
+
+.meta {
+  font-size: 24rpx;
+  color: $text-secondary;
+  margin-bottom: 8rpx;
+}
+
+.receiver {
+  font-size: 26rpx;
+  color: $text-color;
+  margin-bottom: 8rpx;
+}
+
+.address {
+  font-size: 24rpx;
+  color: $text-secondary;
+  line-height: 1.5;
+}

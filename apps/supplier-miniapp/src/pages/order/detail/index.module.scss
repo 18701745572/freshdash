@@ -1,0 +1,107 @@
+@import '../../../styles/variables.scss';
+
+.page {
+  min-height: 100vh;
+  background: $bg-color;
+  padding: 20rpx;
+  padding-bottom: 160rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background: $card-bg;
+  border-radius: $border-radius;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.row {
+  font-size: 26rpx;
+  color: $text-color;
+  margin-bottom: 12rpx;
+  line-height: 1.6;
+}
+
+.label {
+  color: $text-secondary;
+}
+
+.status {
+  color: $primary-color;
+}
+
+.item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.itemName {
+  font-size: 28rpx;
+  color: $text-color;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.itemMeta {
+  font-size: 24rpx;
+  color: $text-secondary;
+}
+
+.remark {
+  font-size: 26rpx;
+  color: #ff7d00;
+  line-height: 1.6;
+}
+
+.shipBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $card-bg;
+  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.trackingInput {
+  height: 80rpx;
+  background: $bg-color;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.shipButton {
+  height: 88rpx;
+  background: $primary-color;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shipButtonText {
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.loading {
+  text-align: center;
+  padding: 80rpx;
+  color: $text-secondary;
+  font-size: 28rpx;
+}
