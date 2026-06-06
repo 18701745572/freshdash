@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Swiper, SwiperItem, Image } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
-import { mockProducts } from '@/data/products';
+import { getProductById } from '@/services';
+import { useCartStore } from '@/stores/cartStore';
+import { formatPrice } from '@/utils/price';
 import styles from './index.module.scss';
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useRouter().params;
-  const [product] = useState(mockProducts.find((p) => p.id === id) || mockProducts[0]);
-
-  useEffect(() => {
-    console.log('[ProductDetail] id=', id);
-  }, [id]);
-
-  const formatPrice = (price: number) => (price / 100).toFixed(2);
+  const product = getProductById(id || '') || getProductById('1')!;
+  const addItem = useCartStore((s) => s.addItem);
+  const [quantity, setQuantity] = useState(1);
 
   const handleAddCart = () => {
+    addItem(product, quantity);
     Taro.showToast({ title: '已加入购物车', icon: 'success' });
   };
 
   const handleBuy = () => {
-    Taro.navigateTo({ url: '/pages/order-list/index' });
+    addItem(product, quantity);
+    Taro.switchTab({ url: '/pages/cart/index' });
   };
 
   return (
@@ -42,6 +42,21 @@ const ProductDetailPage: React.FC = () => {
           {product.tags.map((tag) => (
             <Text key={tag} className={styles.tag}>{tag}</Text>
           ))}
+        </View>
+      </View>
+
+      <View className={styles.specSection}>
+        <View className={styles.specRow}>
+          <Text className={styles.specLabel}>规格</Text>
+          <Text>{product.unit}</Text>
+        </View>
+        <View className={styles.specRow}>
+          <Text className={styles.specLabel}>数量</Text>
+          <View className={styles.quantityControl}>
+            <View className={styles.qtyBtn} onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</View>
+            <Text className={styles.qtyValue}>{quantity}</Text>
+            <View className={styles.qtyBtn} onClick={() => setQuantity(quantity + 1)}>+</View>
+          </View>
         </View>
       </View>
 

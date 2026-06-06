@@ -1,0 +1,53 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-xl $page-padding;
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.image {
+  width: 100%;
+  height: 400rpx;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.title {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.desc {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  text-align: center;
+  line-height: $line-height-loose;
+  margin-bottom: $spacing-xl;
+}
+
+.notifyBtn {
+  height: $button-height-md;
+  padding: 0 64rpx;
+  background: $color-primary;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge {
+  margin-top: $spacing-lg;
+  padding: $spacing-xs $spacing-md;
+  background: rgba(0, 181, 120, 0.1);
+  color: $color-primary;
+  font-size: $font-size-sm;
+  border-radius: $radius-round;
+}

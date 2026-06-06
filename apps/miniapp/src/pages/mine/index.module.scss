@@ -25,6 +25,13 @@
   margin-right: $spacing-md;
 }
 
+.avatarImg {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: $spacing-md;
+}
+
 .userInfo {
   flex: 1;
 }

@@ -9,6 +9,21 @@
   min-height: 100vh;
 }
 
+.canvas {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+}
+
+.preview {
+  width: 600rpx;
+  background: linear-gradient(180deg, #00b578 0%, #008f5f 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow-card;
+  text-align: center;
+}
+
 .poster {
   width: 600rpx;
   background: $color-bg-card;
@@ -21,12 +36,12 @@
 .logo {
   font-size: 48rpx;
   font-weight: $font-weight-bold;
-  color: $color-primary;
+  color: $color-text-white;
 }
 
 .slogan {
   font-size: $font-size-md;
-  color: $color-text-secondary;
+  color: rgba(255, 255, 255, 0.85);
   margin-top: $spacing-sm;
 }
 
@@ -45,13 +60,13 @@
 
 .codeText {
   font-size: $font-size-lg;
-  color: $color-text-primary;
+  color: $color-text-white;
   font-weight: $font-weight-semibold;
 }
 
 .tip {
   font-size: $font-size-sm;
-  color: $color-text-tertiary;
+  color: rgba(255, 255, 255, 0.7);
   margin-top: $spacing-sm;
 }
 

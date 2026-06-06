@@ -94,3 +94,31 @@
   color: $color-price;
   font-weight: $font-weight-bold;
 }
+
+.actionBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.actionBtn {
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-md;
+  border-radius: $radius-button;
+  border: 1rpx solid $color-border;
+  color: $color-text-primary;
+}
+
+.actionBtnPrimary {
+  background: $color-primary;
+  color: $color-text-white;
+  border-color: $color-primary;
+}

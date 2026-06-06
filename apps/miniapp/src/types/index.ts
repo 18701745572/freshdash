@@ -19,6 +19,28 @@ export interface Product {
   originalPrice?: number;
   unit: string;
   tags: string[];
+  categoryId?: string;
+  stock?: number;
+}
+
+export interface UserInfo {
+  id: string;
+  nickName: string;
+  avatarUrl: string;
+  phone?: string;
+}
+
+export interface CommissionRecord {
+  id: string;
+  name: string;
+  time: string;
+  amount: number;
+}
+
+export interface PromoterInfo {
+  code: string;
+  isApproved: boolean;
+  stats: PromoterStats;
 }
 
 export interface CartItem {
@@ -35,8 +57,11 @@ export interface Order {
   orderNo: string;
   status: OrderStatus;
   totalAmount: number;
+  discountAmount?: number;
   items: OrderItem[];
   createdAt: string;
+  address?: Address;
+  remark?: string;
 }
 
 export interface OrderItem {
