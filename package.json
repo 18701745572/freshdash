@@ -14,7 +14,8 @@
     "dev:backend": "pnpm --filter @freshdash/backend start:dev",
     "dev:admin": "pnpm --filter @freshdash/admin dev",
     "dev:miniapp": "pnpm --filter @freshdash/miniapp dev:weapp",
-    "dev:supplier": "pnpm --filter @freshdash/supplier-miniapp dev:weapp"
+    "dev:supplier": "pnpm --filter @freshdash/supplier-miniapp dev:weapp",
+    "build:admin": "cd apps/admin && vite build"
   },
   "devDependencies": {
     "typescript": "^5.3.0"

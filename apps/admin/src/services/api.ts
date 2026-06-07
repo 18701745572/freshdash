@@ -14,7 +14,7 @@ import type {
   PaginatedResult,
 } from '../types';
 
-const USE_MOCK = true;
+const USE_MOCK = true; // Always use mock data
 
 const api = axios.create({
   baseURL: '/api',
