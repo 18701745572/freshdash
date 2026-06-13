@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import Taro from '@tarojs/taro';
+import { request } from '@/services/api';
 import { UserInfo } from '@/types';
 
 interface AuthState {
@@ -7,15 +8,9 @@ interface AuthState {
   userInfo: UserInfo | null;
   isLoggedIn: boolean;
   login: () => Promise<void>;
+  logout: () => void;
   loadFromStorage: () => void;
 }
-
-const MOCK_USER: UserInfo = {
-  id: 'user-001',
-  nickName: '鲜达用户',
-  avatarUrl: 'https://picsum.photos/id/64/200/200',
-  phone: '138****8000',
-};
 
 export const useAuthStore = create<AuthState>((set) => ({
   token: '',
@@ -29,10 +24,37 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   login: async () => {
-    await new Promise((r) => setTimeout(r, 300));
-    const token = 'mock-jwt-token-' + Date.now();
-    Taro.setStorageSync('token', token);
-    Taro.setStorageSync('userInfo', MOCK_USER);
-    set({ token, userInfo: MOCK_USER, isLoggedIn: true });
+    try {
+      const { code } = await Taro.login();
+      const res = await request<{ token: string; user: UserInfo }>({
+        url: '/auth/wechat-login',
+        method: 'POST',
+        data: { code },
+      });
+
+      Taro.setStorageSync('token', res.token);
+      Taro.setStorageSync('userInfo', res.user);
+      set({ token: res.token, userInfo: res.user, isLoggedIn: true });
+    } catch (err) {
+      console.error('登录失败', err);
+      // 开发环境降级到 mock 登录
+      if (process.env.NODE_ENV === 'development') {
+        const mockUser: UserInfo = {
+          id: 'dev-user-001',
+          nickName: '开发用户',
+          avatarUrl: '',
+          phone: '',
+        };
+        Taro.setStorageSync('token', 'dev-token');
+        Taro.setStorageSync('userInfo', mockUser);
+        set({ token: 'dev-token', userInfo: mockUser, isLoggedIn: true });
+      }
+    }
+  },
+
+  logout: () => {
+    Taro.removeStorageSync('token');
+    Taro.removeStorageSync('userInfo');
+    set({ token: '', userInfo: null, isLoggedIn: false });
   },
 }));

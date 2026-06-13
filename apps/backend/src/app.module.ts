@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { PrismaModule } from './prisma/prisma.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
@@ -21,6 +22,7 @@ import { ExportModule } from './modules/export/export.module';
 @Module({
   imports: [
     PrismaModule,
+    AuthModule,
     UserModule,
     ProductModule,
     CategoryModule,

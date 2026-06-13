@@ -66,6 +66,7 @@ async function main() {
         originalPrice: 599,
         stock: 100,
         categoryId: veg.id,
+        supplierId: supplier.id,
         coverImage: 'https://placehold.co/400x400?text=Shanghai+Green',
       },
     });

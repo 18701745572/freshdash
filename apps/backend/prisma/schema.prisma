@@ -15,6 +15,8 @@ model User {
   phone     String?
   isPromoter Boolean @default(false) @map("is_promoter")
   promoterCode String? @unique @map("promoter_code")
+  sessionKey  String?  @map("session_key")
+  unionId     String?  @map("union_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -145,7 +147,9 @@ model Supplier {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  orders    Order[]
+  orders     Order[]
+  products   Product[]
+  dispatches OrderDispatch[]
 
   @@map("suppliers")
 }
@@ -203,6 +207,8 @@ model Address {
   isDefault Boolean  @default(false) @map("is_default")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("addresses")
 }

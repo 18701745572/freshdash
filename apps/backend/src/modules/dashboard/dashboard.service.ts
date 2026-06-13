@@ -143,11 +143,11 @@ export class DashboardService {
 
   async getOrderStatusStats() {
     return this.cacheService.getOrSet('dashboard:order-status', async () => {
-      const statuses = ['PENDING_PAYMENT', 'PENDING_DISPATCH', 'PENDING_SHIPMENT', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
+      const statuses = ['PENDING_PAYMENT', 'PENDING_DISPATCH', 'PENDING_SHIPMENT', 'SHIPPED', 'COMPLETED', 'CANCELLED'] as const;
 
       const stats = await Promise.all(
         statuses.map((status) =>
-          this.prisma.order.count({ where: { status } })
+          this.prisma.order.count({ where: { status: status as any } })
         )
       );
 
